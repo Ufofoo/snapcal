@@ -10,9 +10,9 @@
 <div class="container">
 
     <div class="nav-links">
-        <a href="privacy.html"><strong>Privacy Policy</strong></a>
-        <a href="terms.html">Terms of Use</a>
-    </div>
+    <a href="privacy.html" id="nav-privacy"><strong>Privacy Policy</strong></a>
+    <a href="terms.html" id="nav-terms">Terms of Use</a>
+</div>
 
     <div class="lang-switcher">
         <a href="#" onclick="switchLang('zh')" class="active">中文</a>
@@ -354,17 +354,44 @@
 </div>
 
 <script>
+var navText = {
+    zh: { privacy: '隐私政策', terms: '使用条款' },
+    en: { privacy: 'Privacy Policy', terms: 'Terms of Use' },
+    ja: { privacy: 'プライバシーポリシー', terms: '利用規約' },
+    ko: { privacy: '개인정보 처리방침', terms: '이용약관' },
+    fr: { privacy: 'Politique de Confidentialité', terms: "Conditions d'Utilisation" },
+    de: { privacy: 'Datenschutzrichtlinie', terms: 'Nutzungsbedingungen' },
+    es: { privacy: 'Política de Privacidad', terms: 'Condiciones de Uso' },
+    pt: { privacy: 'Política de Privacidade', terms: 'Termos de Uso' }
+};
+
 function switchLang(lang) {
     document.querySelectorAll('.lang-section').forEach(function(el) { el.classList.remove('active'); });
     document.querySelectorAll('.lang-switcher a').forEach(function(el) { el.classList.remove('active'); });
     document.getElementById('lang-' + lang).classList.add('active');
     event.target.classList.add('active');
+
+    var t = navText[lang] || navText['en'];
+    document.getElementById('nav-privacy').innerHTML = '<strong>' + t.privacy + '</strong>';
+    document.getElementById('nav-terms').textContent = t.terms;
 }
+
 (function() {
     var userLang = navigator.language || navigator.userLanguage;
     var langMap = { 'zh': 'zh', 'en': 'en', 'ja': 'ja', 'ko': 'ko', 'fr': 'fr', 'de': 'de', 'es': 'es', 'pt': 'pt' };
     var prefix = userLang.substring(0, 2).toLowerCase();
-    if (langMap[prefix]) { switchLang(langMap[prefix]); }
+    if (langMap[prefix]) {
+        document.querySelectorAll('.lang-section').forEach(function(el) { el.classList.remove('active'); });
+        document.querySelectorAll('.lang-switcher a').forEach(function(el) { el.classList.remove('active'); });
+        document.getElementById('lang-' + langMap[prefix]).classList.add('active');
+        var btns = document.querySelectorAll('.lang-switcher a');
+        var langOrder = ['zh','en','ja','ko','fr','de','es','pt'];
+        var idx = langOrder.indexOf(langMap[prefix]);
+        if (idx >= 0 && btns[idx]) { btns[idx].classList.add('active'); }
+        var t = navText[langMap[prefix]] || navText['en'];
+        document.getElementById('nav-privacy').innerHTML = '<strong>' + t.privacy + '</strong>';
+        document.getElementById('nav-terms').textContent = t.terms;
+    }
 })();
 </script>
 </body>
